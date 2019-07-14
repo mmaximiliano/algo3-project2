@@ -1,0 +1,105 @@
+\section{Implementaci\'on}
+En esta sección explicaremos las estructuras elegidas para representar los datos.
+
+\subsection{Arco}
+Para representar los ejes de un grafo creamos la struct arco, con los siguientes atributos:
+\begin{itemize}
+\item peso
+\item cola
+\item cabeza
+\end{itemize}
+Si tenemos una arista m que va de un nodo $a$, a un nodo $b$ con un valor $k$. Luego podemos representar m de la siguiente forma:
+\begin{itemize}
+\item peso = k
+\item cola = a
+\item cabeza = b
+\end{itemize}
+
+\subsection{Grafo}
+Para representar grafos elegimos una representación basada en lista de adyacencias. Para esto, creamos la estructura grafoAd con los siguientes atributos:
+\begin{itemize}
+\item listaAd: es un vector de listas. Cada posición $i$ del vector guarda una lista con los arcos salientes del nodo $i$. Es decir, guarda los vecinos a los que se puede acceder desde $i$, con el peso de la arista que lo permite\footnote{Además por ser eje guarda la cola de la arista, que en este caso será $i$ para todos los ejes de la lista.}.
+\item cantNodos: es un entero que guarda la cantidad de nodos del grafo.
+\item cantAristas: es un entero que guarda la cantidad total de aristas del grafo.
+\end{itemize}
+
+\indent Y los siguientes métodos:
+\begin{itemize}
+\item grafoAd: es el constructor de la clase. Inicializa cantNodos y cantAristas en cero, y la lista de adyacencias como un vector vacío.
+\item agregarNodo: agrega una nueva posición al vector, con una lista vacía.
+\item agregarEje: agrega una arista al grafo, con el peso y los nodos especificados en los parámetros.
+\end{itemize}
+
+\newpage
+
+\subsection{Lectura de la entrada}
+
+A partir de la entrada del programa, generamos el grafo modificado. Para lograrlo, generamos un grafo con n'=61*n nodos, donde el nodo i representa al nodo i/61 del grafo original, en un estado con i mod 61 Litros de nafta. Por ejemplo, si teníamos un grafo con 100 nodos, en el grafo modificado el nodo 176 representa a la ciudad 2 con 54 litros en el tanque. \\
+\indent Sabiendo esto, para cada costo $C_{i}$ de combustible leido generamos 61 vertices, donde cada uno está unido al siguiente con una arista de costo $C_{i}$. De esta manera, logramos generar todas las aristas de tipo A. \\
+\indent Por último, para cada ruta leida, generamos las aristas de tipo B. Si una ruta es representada con los enteros $a_{i}$, $b_{i}$, $l_{i}$ (ambas ciudades seguidas del costo de la ruta), vamos a decir que una arista representa un movimiento valido si $a_{i}$ representa un estado con $K$ litros en el tanque, y $b_{i}$ representa un estado con $k$-$l_{i}$ litros. Luego, simplemente debemos conectar un nodo de la ciudad $a_{i}$ a otro de $b_{i}$ (y viceversa) si representan un movimiento valido. \\
+\indent Presentamos el pseudocodigo a continuación:
+
+\begin{algorithm}[H]
+\caption{crear grafo modificado}
+\label{img2sorted}
+\begin{algorithmic}[1]
+\Procedure{crearGrafoModificado}{}
+\State $i \gets 0$
+\For{$i < cantidadDeCiudades$}
+	\State G.agregarNodo()
+	\State $j \gets 1$
+	\State precioNafta $\gets$ precioNaftaEn(i)
+	\For{$j < 61$} \Comment{Generamos aristas de tipo A}
+		\State G.agregarNodo()			\Comment{El nodo de estar en la ciudad i con j litros}
+		\State a $\gets 61*i+j-1$			\Comment{Tener j-1 litros en la ciudad i}
+		\State b $\gets$ siguienteDe(a)		\Comment{Tener j litros en la ciudad i}
+		\State G.agregarEje(precioNafta, a, b) \Comment{Costo de pasar de tener j-1 litros, a tener j en la ciudad i}
+	\EndFor
+\EndFor
+
+\State $i \gets 0$
+\For{$i < cantidadDeRutas$}
+	\State a $\gets$ extremoADeArista(i)
+	\State b $\gets$ extremoBDeArista(i)
+	\State l $\gets$ cantidadDeLitrosDeAaB(i)
+	\State j $\gets$ 0
+	\For{j $<$ 61} 					\Comment{Generamos aristas de tipo B}
+		\If{j-l $\geq$ 0} 				\Comment{Si puedo ir de a a b con la nafta que tengo}
+			\State a' $\gets$ a*61+j
+			\State b' $\gets$ b*61+j-l
+			\State G.agregarEje(0, a', b') 	\Comment{La arista de viajar de la ciudad a a b con l litros de nafta}
+			\State a' $\gets$ a*61+j-l
+			\State b' $\gets$ b*61
+			\State G.agregarEje(0, b', a')	 \Comment{La arista de viajar de la ciudad b a a con l litros de nafta}
+		\EndIf
+	\EndFor
+\EndFor
+\State return G
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\indent Complejidad: $\mathcal{O}(n+m)$
+
+\subsection{Impresión por salida estándar}
+Para imprimir el resultado, simplemente hay que ser cuidadosos y recordar que nuestro nuevo grafo contiene nodos que no nos interesan (Solo queremos empezar y terminar en estados en los que tenemos 0 Litros en el tanque). De esta forma, si terminamos con una matriz de distancias, solo debemos imprimir aquellas posiciones cuyas columnas o filas sean iguales a 0 modulo 61.
+
+%\begin{algorithm}[H]
+%\caption{imprimir resultados del programa}
+%\label{}
+%\begin{algorithmic}[1]
+%\Procedure{imprimirResultado}{$matriz$ distancias}
+%\State i $\gets$ 0
+%\For{i$<$distancias.size()}
+%	\State j $\gets$ 0
+%	\For{j$<$distancias.size()}
+%		\If{i $\neq$ j}
+%			\State imprimir(i, j, distancias$[i][j]$) \Comment{Imprimir la mínima distancia de ir de i a j}
+%		\EndIf
+%	\EndFor
+%\EndFor
+%\EndProcedure
+%\end{algorithmic}
+%\end{algorithm}
+%
+%\indent Complejidad: $\mathcal{O}()$

@@ -1,0 +1,81 @@
+\documentclass[10pt,a4paper]{article}
+\setlength{\parskip}{0.8em}
+
+\usepackage[utf8]{inputenc} % para poder usar tildes en archivos UTF-8
+\usepackage[spanish]{babel} % para que comandos como \today den el resultado en castellano
+\usepackage[left=2cm, right=2cm, top=2cm, bottom=2cm]{geometry}
+\usepackage{caratula}
+
+\usepackage{amsmath,amsfonts,amssymb,mathtools,amsthm,epsfig,epstopdf,url,array}
+\usepackage{xcolor}
+\usepackage{xspace}
+\usepackage{xargs}
+\usepackage{ifthen}
+ 
+\usepackage{enumerate}
+\usepackage{multirow}
+\usepackage{float}
+
+\usepackage{verbatim}
+
+
+\usepackage{caption}
+
+% \usepackage[onelanguage, spanish]{algorithm2e}
+  % \NoCaptionOfAlgo
+% \LinesNumbered\RestyleAlgo{ruled}\IncMargin{1em}\DontPrintSemicolon\SetArgSty{}\SetCommentSty{textsf}\SetFuncSty{textsf}
+% \SetKwProg{For}{para}{ hacer}{fin}
+% \SetKwProg{Fn}{función}{:}{fin}
+
+\def\code#1{\texttt{#1}}
+
+\usepackage{changepage}
+\usepackage{pdfpages}
+\usepackage{hyperref}
+\usepackage[page, toc]{appendix}
+\usepackage[nottoc]{tocbibind}
+\usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{euler}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{graphs,graphs.standard}
+\usetikzlibrary{arrows}
+\usepackage{algorithmicx, algpseudocode, algorithm}
+\usepackage{float}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+\DeclareMathOperator{\tc}{\textbf{tc}}
+
+\begin{document}
+
+\titulo{Trabajo Práctico 2:blabla}
+
+\materia{Algoritmos y estructuras de datos III}
+
+\integrante{Peretti, Olivia}{359/17}{operetti@dc.uba.ar}
+\integrante{Pironio, Nicolás}{37/17}{npironio@dc.uba.com}
+\maketitle
+
+\clearpage
+\tableofcontents
+
+\clearpage
+\input{introduccion}
+\clearpage
+
+\input{desarrollo}
+\clearpage
+
+\input{implementacion}
+\clearpage
+
+\input{experimentacion}
+\clearpage
+
+\input{conclusiones}
+\clearpage
+
+
+\end{document}

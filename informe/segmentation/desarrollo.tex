@@ -1,0 +1,36 @@
+\section{Desarrollo}
+
+A continuaci\'on presentaremos las ideas generales e intuiciones que se desarrollan en \cite{Felzenszwalb2004} y discutiremos sobre las implementaciones posibles.\\
+\indent Como se mencion\'o, el m\'etodo se basa en modelar el problema con un grafo. Este se deduce de la imagen de la siguiente manera: $G=(V,\ E)$ donde 
+\begin{itemize}
+	\item[] $V$: píxeles de la imagen.
+	\item[] $(v_i,\ v_j)\in E$: representa la disimiltud entre el pixel $v_i$ y $v_j$.
+\end{itemize}
+ 
+\indent De esta forma podemos definir que una segmentaci\'on de la imagen es tomar un \textit{subgrafo inducido} de $G$ o dicho de otra forma una segmentaci\'on $S$ es una partici\'on en componentes conexas de $V$. Esta definici\'on se justifica con la idea que los vértices de una componente deben ser similares entre sí, y no as\'i con los de una componente distinta. Esto se termina traduciendo en que los ejes de vértices en la misma componente deben tener un peso ``chico'' mientras que entre vértices de componentes distintas deben tener un peso ``grande''.\\
+\indent A partir de este modelo se construye un predicado que busca responder a la pregunta de si hay evidencia de que existe un l\'imite entre dos componentes distintas. Este se basa en comparar la diferencia entre dos vértices vecinos de dos componentes distintas, teniendo en cuenta la diferencia inter-componente de cada uno para reflejar el valor local de cada componente.\\
+\indent Se trabajan con dos conceptos para poder definir este predicado. Por una parte se define para una componente $C$ su \textit{internal difference} (diferencia interna) $Int(C)$ como el mayor de los pesos de las aristas presentes en el \textit{árbol generador m\'inimo} (AGM) de $C$. La intuici\'on que refleja esta medida es que la componente admite que los píxeles tengan a lo sumo una disimilaridad de $Int(C)$.\\
+\indent Luego para componentes $C_1, \ C_2$ definimos la diferencia entre ellos $Diff(C_1,\ C_2)$  como la arista de menor peso entre $v_1\in C_1$ y $v_2 \in C_2$. En un principio esta última no refleja substancialmente la relaci\'on entre dos componentes, ya que tiene en cuenta una única ``conexi\'on'', pero se observa empíricamente que los resultados obtenidos son razonables y que de esta medida se desprende un algoritmo considerablemente eficiente.\\
+\indent Dichas estas definiciones se explica el predicado $D$ como:
+\[
+	D(C_1,\ C_2)=\begin{cases}
+               		True            & \text{si } Dif(C_1, \ C_2)>MInt(C_1,\ C_2)\\
+               		False			& \text{Caso contrario}
+           		 \end{cases}
+\]
+con $MInt(C_1, \ C_2)=Min(Int(C_1) + \tau(C_1), Int(C_2) + \tau(C_2))$ con $\tau$ una funci\'on para regular el grado en el cual la diferencia entre componentes tiene que ser mayor que la diferencia interna para afirmar que existe un l\'imite entre componentes. Intuitivamente si solo se tomase el m\'inimo entre diferencias internas no reflejar\'ia la mayor parte de la informaci\'on interna de la componente. Con esto en mente, podemos tomar $\tau(C)=\frac{k}{\#C}$ con $k$ un hiperparámetro. De esta forma la elecci\'on de $k$ influye sobre cuándo se decide que hay evidencia para definir que hay un l\'imite entre componentes, siendo que un $k$ mayor es propenso a resultar en delimitar menos componentes y un $k$ más chico implicar\'ia que para afirmar que hay un l\'imite para una componente peque\~na se requiere m\'as evidencia. \\
+\indent Considerando estas nociones se desprende el siguiente algoritmo para computar la segmentaci\'on:
+\begin{enumerate}
+	\item Ordenar no decrecientemente las aristas: $E=(e_1 \dots e_m)$.
+	\item Empezar con la partici\'on $S_0$ con cada vértice en una componente separada.
+	\item Para $i=1\dots m$ hacer 4.
+	\item Sea $C_1$ la componente de la cola de $e_i$ y $C_2$ la componente de la cabeza de $e_i$. Si $C_1\neq C_2$ y $peso(e_i) < MInt(C_1,\ C_2)$ entonces $S_i$ se construye uniendo las componentes $C_1$ y $C_2$ de $S_{i-1}$.
+	\item Devolver $S=S_m$.
+\end{enumerate}
+
+Notar que el algoritmo que se obtiene de las definiciones es en esencia el algoritmo de Kruskal para obtener un AGM. Recordemos que el invariante de Kruskal es mantener un bosque generador m\'inimo y en cada iteraci\'on agregar una arista segura y candidata. La diferencia que podemos encontrar en el algoritmo de segmentaci\'on propuesto es lo que definimos como arista candidata: en nuestro caso una arista es candidata cuando es la m\'inima que une dos componentes distintos y además su peso no supera $MInt$. Esto claramente no tiene porqué resultar en un AGM pero sí en un bosque generador m\'inimo donde sus componentes s\'i son AGM, dándole una nueva interpretaci\'on a lo previamente desarrollado. \\
+\indent Si bien no es el enfoque de este trabajo demostrar las propiedades que posee el algoritmo si vamos a mencionarlas:\\
+Se define que una segmentaci\'on es \textit{muy fina} si existen regiones $C_1$, $C_2$ para las cuales no existe evidencia de que haya un l\'imite entre ellas seg\'un el predicado $D$. \\
+\indent Se dice que $T$ es un \textit{refinamiento propio} de una segmentaci\'on $S$ si $\forall C'\in T, \ \exists C\in S \text{ tal que } C'\subsetneq C$ \\
+\indent Una segmentaci\'on $S$ es \textit{muy gruesa} si existe un refinamiento propio de $S$ que no es muy fino.\\
+\indent Con estas nociones establecidas se prueba que el algoritmo propuesto provee una segmentaci\'on que no es ni muy fina ni muy gruesa.

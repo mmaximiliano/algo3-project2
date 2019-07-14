@@ -1,0 +1,12 @@
+\section{Conclusión y trabajos futuros}
+
+En los resultados de los experimentos, notamos que en la mayoría de los casos obtenemos mejores tiempos utilizando el algoritmo de Dijkstra con cola de prioridad. Hubo casos en los que tanto Bellman-Ford como la otra versión de Dijkstra obtuvieron mejores resultados. Sin embargo, en ambos experimentos, su crecimiento asintótico parece ser mucho menor.
+En cuanto a posibles mejoras para solucionar el problema, en un comienzo consideramos una estrategia greedy para solucionarlo. El mismo consistía en completar el grafo de entrada (si dos ciudades no estan directamente conectadas, agregamos una arista entre ellas con peso igual al camino mínimo entre ambas, medido en litros. Si dicho costo era mayor a la capacidad del tanque, el peso sería infinito), y en el hecho de que, dado un camino fijo de una ciudad A a otra ciudad B, hay una estrategia óptima para cargar combustible: \\
+\indent Si $s = u_{1}, u_{2}, ... , u_{l}$ representa las paradas de recarga de un posible camino, la siguiente es una estrategia óptima para decidir la cantidad de gas que se va a llenar en cada parada:
+en la parada $u_{l}$ cargamos nafta suficiente para alcanzar al nodo destino con el tanque vacío; para $j <l$:
+\begin{enumerate}
+ 	\item Si $c(u_{j}) < c(u_{j+1})$, entonces en $u_{j}$ llenamos el tanque.
+ 	\item Si $c(u_{j}) \geq c(u_{j+1})$, entonces en $u_{j}$ llenamos lo suficiente para llegar a $u_{j+1}$
+\end{enumerate}
+
+Sin embargo, hubo casos que nos trajeron problemas al utilizar este método, como por ejemplo el grafo mostrado en la introducción, ya que terminabamos con caminos no simples. Pensamos en posibles soluciones a éste problema, pero complicaban considerablemente la implementación, por lo que decidimos abandonar la estrategia por la presentada en el trabajo.

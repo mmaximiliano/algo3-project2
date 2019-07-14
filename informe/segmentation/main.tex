@@ -1,0 +1,94 @@
+\documentclass[10pt,a4paper]{article}
+\setlength{\parskip}{0.8em}
+
+\usepackage[utf8]{inputenc} % para poder usar tildes en archivos UTF-8
+\usepackage[spanish]{babel} % para que comandos como \today den el resultado en castellano
+\usepackage[left=2cm, right=2cm, top=2cm, bottom=2cm]{geometry}
+\usepackage{caratula}
+\usepackage{amsmath,amsfonts,amssymb,mathtools,amsthm,epsfig,epstopdf,url,array}
+\usepackage{xcolor}
+\usepackage{xspace}
+\usepackage{xargs}
+\usepackage{ifthen}
+\usepackage{enumerate}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{verbatim}
+\usepackage{caption}
+\usepackage{changepage}
+\usepackage{pdfpages}
+\usepackage{hyperref}
+\usepackage[page, toc]{appendix}
+\usepackage[nottoc]{tocbibind}
+\usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{euler}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{graphs,graphs.standard}
+\usetikzlibrary{arrows}
+\usepackage{algorithmicx, algpseudocode, algorithm}
+\usepackage{float}
+\usepackage{cite}
+\linespread{1.3}
+
+\begin{document}
+
+\titulo{Trabajo Práctico 2: Segmentaci\'on de im\'agenes}
+
+\materia{Algoritmos y estructuras de datos III}
+
+\integrante{Blufstein, Marcos}{300/17}{marcos@blufstein.com}
+\integrante{Martino, Maximiliano}{123/17}{maxii.martino@gmail.com}
+\integrante{Peretti, Olivia}{359/17}{operetti@dc.uba.ar}
+\integrante{Pironio, Nicolás}{37/17}{npironio@dc.uba.com}
+\maketitle
+
+\clearpage
+\tableofcontents
+
+\clearpage
+\input{introduccion}
+\clearpage
+
+\input{desarrollo}
+\clearpage
+
+\input{implementacion}
+\clearpage
+
+\input{experimentacion}
+\clearpage
+
+\input{conclusiones}
+\clearpage
+
+\begin{thebibliography}{9}
+
+\bibitem{Felzenszwalb2004}
+    Felzenszwalb, Pedro F., Huttenlocher, Daniel P.,
+    \textit{Efficient Graph-Based Image Segmentation},
+	International Journal of Computer Vision, 01/09/2004
+
+\bibitem{Tarjan}
+	Robert Endre Tarjan.,
+	\textit{Efficiency of a good but not linear set union algorithm},
+	J. Assoc. Comput. Mach., 22:215–225, 1975.
+
+\bibitem{BSDS}
+	D. Martin and C. Fowlkes and D. Tal and J. Malik,
+	A Database of Human Segmented Natural Images and its Application to Evaluating Segmentation Algorithms and Measuring Ecological Statistics
+	Proc. 8th Int'l Conf. Computer Vision, 07/2001
+
+\bibitem{li2013benchmark}
+  Li, Hui and Cai, Jianfei and Nguyen, Thi Nhat Anh and Zheng, Jianmin,
+  \textit{A benchmark for semantic image segmentation},
+  2013 IEEE International Conference on Multimedia and Expo (ICME)
+  paginas 1 a 6, 2013
+
+
+
+\end{thebibliography}
+
+
+\end{document}
